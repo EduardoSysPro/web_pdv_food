@@ -90,14 +90,28 @@ class AuthController extends Controller
 
         unset($_SESSION['usuario_intento']);
 
-        // Si el usuario es Vendedor (o Cajero Móvil, ahora vendedor) -> va al POS de ventas
-        if (in_array($_SESSION['rol'], ['vendedor', 'cajero_movil'], true)) {
+        $rol = $_SESSION['rol'];
+
+        // Roles legacy ('vendedor'/'cajero_movil') se tratan como mesero
+        if (in_array($rol, ['vendedor', 'cajero_movil'], true)) {
+            $rol = 'mesero';
+            $_SESSION['rol'] = 'mesero';
+        }
+
+        // Mesero -> POS de ventas
+        if ($rol === 'mesero') {
             $this->redirigir('ventas');
             return;
         }
 
-        // Importamos y consultamos el modelo de caja si el usuario es cajero estándar
-        if ($_SESSION['rol'] === 'cajero') {
+        // Cocina -> panel de comandas
+        if ($rol === 'cocina') {
+            $this->redirigir('cocina');
+            return;
+        }
+
+        // Cajero estándar: si no tiene turno abierto -> va a abrir caja
+        if ($rol === 'cajero') {
             require_once APP_PATH . 'Models' . DIRECTORY_SEPARATOR . 'Caja.php';
             $modeloCaja = new Caja();
             $turnoAbierto = $modeloCaja->obtenerTurnoAbierto((int)$_SESSION['id']);

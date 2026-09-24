@@ -1,14 +1,18 @@
 <?php
 $nombreUsuario = htmlspecialchars($_SESSION['nombre'] ?? 'Cajero');
 $rolUsuario = $_SESSION['rol'] ?? 'cajero';
-$esAdministrador = (int)($_SESSION['rol_id'] ?? 0) === 1 || in_array(strtolower((string)$rolUsuario), ['admin', 'administrador'], true);
+if (in_array($rolUsuario, ['vendedor', 'cajero_movil'], true)) {
+    $rolUsuario = 'mesero';
+}
+$esAdministrador = (int)($_SESSION['rol_id'] ?? 0) === 1 || (strtolower((string)$rolUsuario) === 'admin');
 $productosBajoStock = 0;
 if ($esAdministrador) {
     require_once APP_PATH . 'Models' . DIRECTORY_SEPARATOR . 'Producto.php';
     $productosBajoStock = (new Producto())->contarProductosBajoStock();
 }
-$esVendedor = in_array(strtolower((string)$rolUsuario), ['vendedor', 'cajero_movil'], true);
-$rolEtiqueta = $esAdministrador ? 'ADMINISTRADOR' : ($esVendedor ? 'VENDEDOR' : 'CAJERO');
+$esMesero = $rolUsuario === 'mesero';
+$esCocina = $rolUsuario === 'cocina';
+$rolEtiqueta = $esAdministrador ? 'ADMINISTRADOR' : ($esMesero ? 'MESERO' : ($esCocina ? 'COCINA' : 'CAJERO'));
 $rutaActual = trim((string)($_GET['url'] ?? ''), '/');
 $esRutaActiva = static function ($ruta) use ($rutaActual) {
     return $rutaActual === $ruta || strpos($rutaActual, $ruta . '/') === 0;
@@ -41,7 +45,12 @@ $esRutaActiva = static function ($ruta) use ($rutaActual) {
             </div>
 
             <nav class="pos-sidebar-nav">
+                <?php if (!$esCocina): ?>
                 <a class="pos-sidebar-link <?php echo $esRutaActiva('ventas') ? 'is-active' : ''; ?>" href="<?php echo URL_BASE; ?>ventas" data-tooltip="Ventas"><i class="fa-solid fa-cart-shopping"></i><span>Ventas</span></a>
+                <?php endif; ?>
+                <?php if ($esCocina || $esAdministrador): ?>
+                <a class="pos-sidebar-link <?php echo $esRutaActiva('cocina') ? 'is-active' : ''; ?>" href="<?php echo URL_BASE; ?>cocina" data-tooltip="Comandas"><i class="fa-solid fa-kitchen-set"></i><span>Comandas</span></a>
+                <?php endif; ?>
                 <?php if ($esAdministrador): ?>
                     <a class="pos-sidebar-link <?php echo $esRutaActiva('clientes') ? 'is-active' : ''; ?>" href="<?php echo URL_BASE; ?>clientes" data-tooltip="Clientes"><i class="fa-solid fa-users"></i><span>Clientes</span></a>
                 <?php endif; ?>
@@ -49,7 +58,7 @@ $esRutaActiva = static function ($ruta) use ($rutaActual) {
                     <a class="pos-sidebar-link <?php echo $esRutaActiva('productos') ? 'is-active' : ''; ?>" href="<?php echo URL_BASE; ?>productos" data-tooltip="Productos"><i class="fa-solid fa-box"></i><span>Productos</span></a>
                     <a class="pos-sidebar-link pos-sidebar-inventory-link <?php echo $esRutaActiva('inventario') ? 'is-active' : ''; ?>" href="<?php echo URL_BASE; ?>inventario" data-tooltip="Inventario"><i class="fa-solid fa-boxes-stacked"></i><span>Inventario</span><?php if ($productosBajoStock > 0): ?><strong class="pos-stock-alert-badge" aria-label="<?php echo $productosBajoStock; ?> productos con stock bajo"><?php echo $productosBajoStock; ?></strong><?php endif; ?></a>
                 <?php endif; ?>
-                <?php if (!$esVendedor): ?>
+                <?php if ($rolUsuario === 'cajero' || $esAdministrador): ?>
                     <a class="pos-sidebar-link <?php echo $esRutaActiva('caja') ? 'is-active' : ''; ?>" href="<?php echo URL_BASE; ?>caja" data-tooltip="Corte de Caja"><i class="fa-solid fa-calculator"></i><span>Corte de Caja</span></a>
                     <a class="pos-sidebar-link <?php echo $esRutaActiva('comprobantes') ? 'is-active' : ''; ?>" href="<?php echo URL_BASE; ?>comprobantes" data-tooltip="Comprobantes"><i class="fa-solid fa-receipt"></i><span>Reimpresión</span></a>
                 <?php endif; ?>

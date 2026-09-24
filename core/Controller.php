@@ -43,11 +43,15 @@ class Controller
 
     $rol = $_SESSION['rol'] ?? 'cajero';
 
-    // Vendedor (y Cajero Móvil, que ahora Funciona como vendedor):
-    // acceso limitado al POS de ventas y los endpoints necesarios
+    // Roles de restaurante legacy ('vendedor'/'cajero_movil') se mapean a 'mesero'
     if (in_array($rol, ['vendedor', 'cajero_movil'], true)) {
+        $rol = 'mesero';
+    }
+
+    // Mesero: acceso al POS de ventas, comandas y endpoints necesarios
+    if ($rol === 'mesero') {
         $url = trim($_GET['url'] ?? '', '/');
-        $rutasPermitidasMovil = [
+        $rutasPermitidasMesero = [
             'login',
             'logout',
             'ventas',
@@ -61,7 +65,7 @@ class Controller
             return $ruta === $base || strpos($ruta, $base . '/') === 0;
         };
         $permitido = false;
-        foreach ($rutasPermitidasMovil as $base) {
+        foreach ($rutasPermitidasMesero as $base) {
             if ($permisoBase($base, $url)) {
                 $permitido = true;
                 break;
@@ -69,6 +73,32 @@ class Controller
         }
         if (!$permitido) {
             $this->redirigir('ventas');
+            exit;
+        }
+        return;
+    }
+
+    // Cocina: solo el panel de comandas de cocina
+    if ($rol === 'cocina') {
+        $url = trim($_GET['url'] ?? '', '/');
+        $rutasPermitidasCocina = [
+            'login',
+            'logout',
+            'cocina',
+            'cotizaciones/imprimir-comanda'
+        ];
+        $permisoBase = function ($base, $ruta) {
+            return $ruta === $base || strpos($ruta, $base . '/') === 0;
+        };
+        $permitido = false;
+        foreach ($rutasPermitidasCocina as $base) {
+            if ($permisoBase($base, $url)) {
+                $permitido = true;
+                break;
+            }
+        }
+        if (!$permitido) {
+            $this->redirigir('cocina');
             exit;
         }
         return;

@@ -24,7 +24,7 @@ class VentasController extends Controller
         $this->requerirAutenticacion();
         $nombreUsuario = htmlspecialchars($_SESSION['nombre'] ?? 'Cajero');
         $rolUsuario = $_SESSION['rol'] ?? 'cajero';
-        $rolEtiqueta = $rolUsuario === 'admin' ? 'Administrador' : ($rolUsuario === 'cajero_movil' ? 'Cajero Móvil' : 'Cajero');
+        $rolEtiqueta = $rolUsuario === 'admin' ? 'Administrador' : ($rolUsuario === 'mesero' ? 'Mesero' : ($rolUsuario === 'cocina' ? 'Cocina' : 'Cajero'));
         $rolClase = $rolUsuario === 'admin' ? 'badge-admin' : 'badge-cajero';
         $fechaActual = date('d/m/Y H:i');
         $urlBase = URL_BASE;

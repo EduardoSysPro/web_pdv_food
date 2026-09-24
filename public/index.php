@@ -42,6 +42,11 @@ $router->get('/logout', 'AuthController@logout');
 
 $router->post('/cotizaciones/enviar-cocina', 'CotizacionesController@enviarCocina');
 $router->get('/cotizaciones/imprimir-comanda/{id}', 'CotizacionesController@imprimirComanda');
+$router->post('/cotizaciones/imprimir-comanda/{id}', 'CotizacionesController@imprimirComanda');
+
+$router->get('/cocina', 'CocinaController@index');
+$router->post('/cocina/estado-comanda/{id}', 'CocinaController@cambiarEstadoComanda');
+$router->post('/cocina/estado-item/{id}', 'CocinaController@cambiarEstadoItem');
 
 $router->get('/ventas', 'VentasController@index');
 $router->post('/ventas/buscar-producto', 'VentasController@buscarProducto');
@@ -103,8 +108,6 @@ $router->get('/clientes/estado-cuenta/{id}', 'ClientesController@estadoCuenta');
 $router->post('/clientes/abonar', 'ClientesController@abonar');
 $router->get('/clientes/abono/ticket/{id}', 'ClientesController@imprimirAbono');
 $router->get('/clientes/buscar', 'ClientesController@buscar');
-$router->get('/configuracion/usuarios/editar/{id}', 'ConfiguracionController@editarUsuario');
-$router->post('/configuracion/usuarios/actualizar/{id}', 'ConfiguracionController@actualizarUsuario');
 
 $router->get('/caja', 'CajaController@index');
 $router->post('/caja/abrir', 'CajaController@abrir');
@@ -115,8 +118,6 @@ $router->get('/caja/ticket/{id}', 'CajaController@imprimirCorte');
 
 $router->get('/configuracion', 'ConfiguracionController@index');
 $router->post('/configuracion/guardar-empresa', 'ConfiguracionController@guardarEmpresa');
-$router->get('/configuracion/usuarios', 'ConfiguracionController@index');
-$router->post('/configuracion/usuarios/guardar', 'ConfiguracionController@guardarUsuario');
 
 $router->get('/usuarios', 'UsuariosController@index');
 $router->get('/usuarios/editar/{id}', 'UsuariosController@editar');

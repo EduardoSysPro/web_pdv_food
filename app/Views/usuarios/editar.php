@@ -30,9 +30,9 @@
         <div class="campo form-group">
             <label for="usuario-rol">Rol</label>
             <select id="usuario-rol" name="rol">
-                <option value="cajero" <?php echo (($usuario['rol'] ?? 'cajero') === 'cajero') ? 'selected' : ''; ?>>Cajero</option>
-                <option value="vendedor" <?php echo (($usuario['rol'] ?? 'cajero') === 'vendedor') ? 'selected' : ''; ?>>Vendedor</option>
-                <option value="cajero_movil" <?php echo (($usuario['rol'] ?? 'cajero') === 'cajero_movil') ? 'selected' : ''; ?>>Cajero Móvil (Celular / Tablet)</option>
+                <option value="cajero" <?php echo (($usuario['rol'] ?? 'cajero') === 'cajero') ? 'selected' : ''; ?>>Cajero de Barra</option>
+                <option value="mesero" <?php echo (($usuario['rol'] ?? 'cajero') === 'mesero') ? 'selected' : ''; ?>>Mesero (Toma pedidos)</option>
+                <option value="cocina" <?php echo (($usuario['rol'] ?? 'cajero') === 'cocina') ? 'selected' : ''; ?>>Cocina (Panel de comandas)</option>
                 <option value="admin" <?php echo (($usuario['rol'] ?? 'cajero') === 'admin') ? 'selected' : ''; ?>>Administrador</option>
             </select>
         </div>

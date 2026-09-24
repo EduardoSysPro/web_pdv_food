@@ -21,10 +21,10 @@
 --    - Codificación utf8mb4: soporta emojis y acentos reales.
 --
 --  USUARIOS DE DEMO  (CAMBIAR CONTRASEÑAS tras el primer ingreso):
---    admin    / password   (administrador)
---    cajero   / 1234       (cajero de mostrador)
---    movil    / 1234       (cajero móvil)
---    vendedor / 1234       (vendedor)
+--    admin    / password   (administrador / gerente)
+--    cajero   / 1234       (cajero de barra / mostrador)
+--    mesero   / 1234       (mesero: toma pedidos y comandas)
+--    cocina   / 1234       (cocina: panel de comandas para preparar)
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS `web_pdv_food_db`
@@ -179,7 +179,7 @@ CREATE TABLE `combo_detalle` (
   KEY `idx_combo_detalle_producto` (`producto_id`),
   CONSTRAINT `fk_combo_detalle_combo` FOREIGN KEY (`combo_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_combo_detalle_producto` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Componentes de los combos/paquetes de restaurante';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Componentes de los combos/paquetes de restaurante';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -522,7 +522,7 @@ CREATE TABLE `productos` (
   KEY `idx_productos_controlar_stock` (`controlar_stock`),
   FULLTEXT KEY `ft_productos_nombre` (`nombre`),
   CONSTRAINT `fk_productos_categoria` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Catálogo del menú';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Catálogo del menú';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -560,7 +560,7 @@ CREATE TABLE `usuarios` (
   `nombre` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre completo del usuario',
   `usuario` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Nombre de usuario para iniciar sesión',
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Contraseña hasheada con bcrypt',
-  `rol` enum('admin','cajero','cajero_movil','vendedor') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'cajero' COMMENT 'Rol del usuario en el sistema',
+  `rol` enum('admin','cajero','mesero','cocina') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'cajero' COMMENT 'Rol del usuario en el sistema',
   `estado` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 = Activo, 0 = Inactivo',
   `caja_id` int DEFAULT NULL COMMENT 'Caja predeterminada del usuario',
   `sucursal` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Sucursal asignada',
@@ -706,7 +706,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `productos` WRITE;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
-INSERT INTO `productos` VALUES (1,'7800010000011','Baleada Sencilla',12.00,25.00,81.000,20.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'gravado_15',15.00,'prod_20260919_154545_8fe8b1bf.jpg',NULL,1,'2026-09-19 15:26:12',1,0),(2,'7800010000012','Baleada Especial (Huevo y Queso)',18.00,35.00,79.000,20.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'gravado_15',15.00,NULL,NULL,1,'2026-09-19 15:26:12',1,0),(3,'7800010000013','Desayuno Típico',45.00,85.00,55.000,15.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'gravado_15',15.00,NULL,NULL,1,'2026-09-19 15:26:12',1,0),(4,'7800010000021','Plato de Carne Asada',70.00,150.00,48.000,10.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'gravado_15',15.00,NULL,NULL,2,'2026-09-19 15:26:12',1,0),(5,'7800010000022','Pollo Asado con Arroz y Frijoles',55.00,120.00,57.000,10.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'gravado_15',15.00,NULL,NULL,2,'2026-09-19 15:26:12',1,0),(6,'7800010000023','Sopa de Res Casera',60.00,130.00,38.000,10.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'gravado_15',15.00,NULL,NULL,2,'2026-09-19 15:26:12',1,0),(7,'7800010000031','Pupusas (2 uds)',18.00,40.00,88.000,15.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'gravado_15',15.00,NULL,NULL,3,'2026-09-19 15:26:12',1,0),(8,'7800010000032','Tacos de Carne (3 uds)',25.00,60.00,78.000,15.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'gravado_15',15.00,NULL,NULL,3,'2026-09-19 15:26:12',1,0),(9,'7800010000033','Nachos con Queso',30.00,70.00,68.000,15.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'gravado_15',15.00,NULL,NULL,3,'2026-09-19 15:26:12',1,0),(10,'7800010000041','Agua de Horchata',8.00,25.00,29.000,20.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'exento',0.00,'prod_20260919_154706_bf5fb05e.webp',NULL,4,'2026-09-19 15:26:12',1,0),(11,'7800010000042','Café de Olla',6.00,20.00,113.000,20.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'exento',0.00,'prod_20260919_154735_b894e00b.jpg',NULL,4,'2026-09-19 15:26:12',1,0),(12,'7800010000043','Refresco Natural de Tamarindo',10.00,30.00,98.000,20.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'exento',0.00,NULL,NULL,4,'2026-09-19 15:26:12',1,0),(13,'7800010000051','Pastel de Tres Leches',20.00,50.00,48.000,10.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'gravado_15',15.00,NULL,NULL,5,'2026-09-19 15:26:12',1,0),(14,'7800010000052','Flan de Coco',15.00,35.00,56.000,10.000,'unidad',0,'solo_unidad','Caja',1.000,0.00,'gravado_15',15.00,NULL,NULL,5,'2026-09-19 15:26:12',1,0);
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -716,7 +715,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Admin','admin','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','admin',1,1,NULL,NULL,'2026-09-19 15:26:12'),(2,'Cajero Principal','cajero','$2y$10$uFaZvFrwaw3uV/ACRDgs2eRqP7KFg01yutDioFbbXQQ1r8u.L51Lu','cajero',1,1,'Mi Negocio','','2026-09-19 15:26:12'),(3,'Cajero Móvil','movil','$2y$10$uFaZvFrwaw3uV/ACRDgs2eRqP7KFg01yutDioFbbXQQ1r8u.L51Lu','cajero_movil',1,1,'Mi Negocio','','2026-09-19 15:26:12'),(4,'Vendedor Principal','vendedor','$2y$10$uFaZvFrwaw3uV/ACRDgs2eRqP7KFg01yutDioFbbXQQ1r8u.L51Lu','vendedor',1,NULL,'Mi Negocio','','2026-09-19 15:26:12');
+INSERT INTO `usuarios` VALUES (1,'Admin','admin','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','admin',1,1,NULL,NULL,'2026-09-19 15:26:12'),(2,'Cajero Barra','cajero','$2y$10$vgi8eyHFvjEDpEHU1loTe.I0SBcUAfeYchnZ22NLDeps0UTTwp6uu','cajero',1,1,'Mi Negocio','','2026-09-19 15:26:12'),(3,'Mesero Principal','mesero','$2y$10$vgi8eyHFvjEDpEHU1loTe.I0SBcUAfeYchnZ22NLDeps0UTTwp6uu','mesero',1,NULL,'Mi Negocio','','2026-09-19 15:26:12'),(4,'Cocina Principal','cocina','$2y$10$vgi8eyHFvjEDpEHU1loTe.I0SBcUAfeYchnZ22NLDeps0UTTwp6uu','cocina',1,NULL,'Mi Negocio','','2026-09-19 15:26:12');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

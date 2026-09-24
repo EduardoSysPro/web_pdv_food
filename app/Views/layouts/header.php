@@ -1,9 +1,12 @@
 <?php
 $nombreUsuario = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
 $rolUsuario = isset($_SESSION['rol']) ? $_SESSION['rol'] : '';
-$esAdministrador = (int)($_SESSION['rol_id'] ?? 0) === 1 || in_array(strtolower((string)$rolUsuario), ['admin', 'administrador'], true);
-$rolEtiqueta = $esAdministrador ? 'Administrador' : 'Cajero';
-$rolClase = $rolUsuario === 'admin' ? 'badge-admin' : 'badge-cajero';
+if (in_array($rolUsuario, ['vendedor', 'cajero_movil'], true)) {
+    $rolUsuario = 'mesero';
+}
+$esAdministrador = (int)($_SESSION['rol_id'] ?? 0) === 1 || strtolower((string)$rolUsuario) === 'admin';
+$rolEtiqueta = $esAdministrador ? 'Administrador' : ($rolUsuario === 'mesero' ? 'Mesero' : ($rolUsuario === 'cocina' ? 'Cocina' : 'Cajero'));
+$rolClase = $rolUsuario === 'admin' || $esAdministrador ? 'badge-admin' : 'badge-cajero';
 $fechaActual = date('d/m/Y H:i');
 ?>
 <!DOCTYPE html>
@@ -22,7 +25,7 @@ $fechaActual = date('d/m/Y H:i');
             <div class="header-logo">
                 <span class="logo-icono">&#128722;</span>
                 <span class="logo-texto">Web PDV</span>
-                <span class="logo-sub">Abarrotes</span>
+                <span class="logo-sub">Restaurante</span>
             </div>
             <div class="header-info">
                 <div class="header-usuario">

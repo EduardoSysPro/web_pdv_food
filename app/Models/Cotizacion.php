@@ -191,4 +191,38 @@ class Cotizacion extends Controller
         $stmt = $this->pdo->prepare('UPDATE cotizaciones SET estado = :cancelada WHERE id = :id AND estado = :pendiente');
         return $stmt->execute([':cancelada' => 'cancelada', ':id' => (int)$id, ':pendiente' => 'pendiente']);
     }
+
+    public function obtenerComandasCocina()
+    {
+        $sql = "SELECT c.id, c.folio, c.estado, c.tipo, c.observaciones, c.creada_en,
+                       c.cliente_nombre, c.cliente_rtn,
+                       u.nombre AS vendedor
+                FROM cotizaciones c
+                INNER JOIN usuarios u ON u.id = c.vendedor_id
+                WHERE c.tipo = 'comanda'
+                  AND c.estado IN ('no_confirmada', 'pendiente', 'en_cocina', 'listo')
+                ORDER BY c.creada_en ASC";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function cambiarEstadoComanda($id, $estado)
+    {
+        $estadosValidos = ['no_confirmada', 'pendiente', 'en_cocina', 'listo', 'servida', 'cancelada'];
+        if (!in_array($estado, $estadosValidos, true)) {
+            return false;
+        }
+        $stmt = $this->pdo->prepare('UPDATE cotizaciones SET estado = :estado WHERE id = :id AND tipo = :tipo');
+        return $stmt->execute([':estado' => $estado, ':id' => (int)$id, ':tipo' => 'comanda']);
+    }
+
+    public function cambiarEstadoItem($detalleId, $estado)
+    {
+        $estadosValidos = ['pendiente', 'en_cocina', 'listo'];
+        if (!in_array($estado, $estadosValidos, true)) {
+            return false;
+        }
+        $stmt = $this->pdo->prepare('UPDATE detalle_cotizaciones SET estado_item = :estado WHERE id = :id');
+        return $stmt->execute([':estado' => $estado, ':id' => (int)$detalleId]);
+    }
 }
