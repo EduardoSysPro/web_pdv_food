@@ -1,0 +1,832 @@
+/* ============================================================
+   Web PDV - Catálogo visual del POS (modo restaurante)
+   Grid de productos con imágenes + panel de ticket
+   Todos los comentarios en español.
+   ============================================================ */
+
+/* ---------- Layout de doble panel ---------- */
+.pos-ventas-split {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.pos-catalogo-panel {
+    flex: 1 1 46%;
+    min-width: 340px;
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: var(--pos-panel);
+    border: 1px solid var(--pos-borde);
+    border-radius: var(--pos-radio);
+    box-shadow: var(--pos-sombra-soft);
+    overflow: hidden;
+}
+
+.pos-ticket-panel {
+    flex: 0 0 400px;
+    min-width: 360px;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: var(--pos-panel);
+    border: 1px solid var(--pos-borde);
+    border-radius: var(--pos-radio);
+    box-shadow: var(--pos-sombra-soft);
+    overflow: hidden;
+}
+
+/* Ajusta el panel de totales que ahora vive dentro del ticket */
+.pos-ventas-main .pos-ticket-panel .pos-tabs-bar {
+    padding: 14px 18px 0;
+    flex-shrink: 0;
+}
+
+.pos-ventas-main .pos-ticket-panel .pos-tabla-contenedor {
+    padding: 0 18px 14px;
+    background: transparent;
+}
+
+.pos-ventas-main .pos-ticket-panel .pos-totales {
+    margin: 0;
+    border-radius: 0 0 var(--pos-radio) var(--pos-radio);
+    flex-shrink: 0;
+}
+
+/* ---------- Totales compactos del ticket ---------- */
+.pos-ventas-main .pos-ticket-panel .pos-totales-compacto {
+    padding: 12px 16px 14px;
+    gap: 12px;
+}
+
+.pos-ventas-main .pos-ticket-panel .pos-totales-compacto .totales-izquierda {
+    gap: 6px;
+    min-width: 0;
+}
+
+.pos-ventas-main .pos-ticket-panel .pos-totales-compacto .total-fila {
+    font-size: 0.82rem;
+    gap: 10px;
+}
+
+.pos-ventas-main .pos-ticket-panel .pos-totales-compacto .total-valor {
+    min-width: 0;
+    font-size: 0.92rem;
+}
+
+.pos-ventas-main .pos-ticket-panel .pos-totales-compacto .totales-derecha {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.pos-ventas-main .pos-ticket-panel .pos-totales-compacto .total-gigante {
+    font-size: clamp(1.7rem, 2vw, 2.4rem);
+    letter-spacing: -0.04em;
+}
+
+/* Evita que los bloques del catálogo se compriman en su columna */
+.catalogo-cabecera,
+.catalogo-categorias {
+    flex-shrink: 0;
+}
+
+/* ---------- Tabla del ticket más compacta ---------- */
+.pos-ventas-main .pos-ticket-panel .pos-tabla thead th {
+    padding: 7px 6px;
+    font-size: 0.66rem;
+}
+
+.pos-ventas-main .pos-ticket-panel .pos-tabla tbody td {
+    padding: 6px;
+    font-size: 0.78rem;
+}
+
+.pos-ventas-main .pos-ticket-panel .pos-tabla tbody td:first-child,
+.pos-ventas-main .pos-ticket-panel .pos-tabla tbody td.numero {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.pos-ventas-main .pos-ticket-panel .pos-tabla tfoot .msg-vacio {
+    padding: 34px 12px;
+    font-size: 0.85rem;
+}
+
+/* ---------- Cabecera del catálogo ---------- */
+.catalogo-cabecera {
+    padding: 14px 16px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom: 1px solid var(--pos-borde);
+}
+
+.catalogo-titulo {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--pos-texto);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.catalogo-titulo > i {
+    color: var(--pos-azul-brand);
+}
+
+.catalogo-buscar {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.catalogo-buscar > i {
+    position: absolute;
+    left: 11px;
+    color: var(--pos-texto-soft);
+    font-size: 0.8rem;
+    pointer-events: none;
+}
+
+.catalogo-buscar input {
+    width: 100%;
+    padding: 9px 12px 9px 32px;
+    border: 1px solid var(--pos-borde-strong);
+    border-radius: 10px;
+    background: var(--pos-input-bg);
+    color: var(--pos-texto);
+    font-size: 0.82rem;
+    font-weight: 600;
+    outline: none;
+    transition: var(--pos-transicion);
+}
+
+.catalogo-buscar input:focus {
+    border-color: var(--pos-azul-brand);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* ---------- Pestañas de categorías ---------- */
+.catalogo-categorias {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--pos-borde);
+    scrollbar-width: thin;
+}
+
+.cat-categoria {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--pos-borde);
+    background: var(--pos-panel-2);
+    color: var(--pos-texto-soft);
+    font-size: 0.74rem;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--pos-transicion);
+}
+
+.cat-categoria:hover {
+    border-color: var(--pos-azul-brand);
+    color: var(--pos-azul-brand);
+}
+
+.cat-categoria.is-active {
+    background: var(--pos-verde);
+    border-color: var(--pos-verde);
+    color: #fff;
+    box-shadow: 0 8px 16px rgba(16, 185, 129, 0.18);
+}
+
+.cat-cat-count {
+    opacity: 0.65;
+    font-weight: 800;
+}
+
+/* ---------- Estado (cargando / vacío) ---------- */
+.catalogo-estado {
+    margin: 0;
+    padding: 26px 16px;
+    text-align: center;
+    color: var(--pos-texto-soft);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.catalogo-estado > i {
+    margin-right: 6px;
+}
+
+/* ---------- Grid de tarjetas ---------- */
+.catalogo-grid {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 12px;
+    padding: 14px 16px 18px;
+    align-content: start;
+    scrollbar-width: thin;
+}
+
+.cat-tarjeta {
+    display: flex;
+    flex-direction: column;
+    background: var(--pos-panel);
+    border: 1px solid var(--pos-borde);
+    border-radius: var(--pos-radio-sm);
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.cat-tarjeta:hover {
+    border-color: var(--pos-verde);
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.1);
+    transform: translateY(-2px);
+}
+
+.cat-tarjeta:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.cat-img {
+    height: 110px;
+    background-color: var(--pos-panel-2);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--pos-texto-soft);
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--pos-borde);
+}
+
+.cat-img-vacia {
+    background-image: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.cat-img-con-foto {
+    position: relative;
+    overflow: hidden;
+}
+
+.cat-img-fondo {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.cat-info {
+    padding: 9px 11px 11px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.cat-nombre {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--pos-texto);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2em;
+}
+
+.cat-precio {
+    color: var(--pos-verde-oscuro);
+    font-size: 0.92rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.cat-stock {
+    font-size: 0.66rem;
+    color: var(--pos-texto-soft);
+    font-weight: 600;
+}
+
+.cat-stock-etiqueta {
+    color: var(--pos-verde);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.cat-tarjeta.cat-stock-bajo {
+    border-color: rgba(251, 191, 36, 0.6);
+}
+
+.cat-tarjeta.cat-stock-bajo .cat-stock {
+    color: #b45309;
+    font-weight: 800;
+}
+
+.cat-tarjeta.cat-sin-stock .cat-img {
+    filter: grayscale(0.9);
+    opacity: 0.7;
+}
+
+.cat-tarjeta.cat-sin-stock .cat-precio,
+.cat-tarjeta.cat-sin-stock .cat-nombre {
+    color: var(--pos-texto-soft);
+}
+
+.cat-tarjeta.cat-agregado {
+    animation: cat-pulse 0.28s ease;
+}
+
+@keyframes cat-pulse {
+    0%  { transform: scale(1); }
+    40% { transform: scale(0.94); }
+    100%{ transform: scale(1); }
+}
+
+/* ---------- Menú lateral desplegado: catálogo más angosto ---------- */
+/* Cuando el sidebar está expandido la columna del catálogo queda
+   más estrecha; compactamos tarjetas para que imagen y texto se vean bien. */
+#pos-app-shell:not(.sidebar-collapsed) .catalogo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+    gap: 10px;
+    padding: 12px 12px 14px;
+}
+
+#pos-app-shell:not(.sidebar-collapsed) .cat-img {
+    height: 88px;
+    font-size: 1.25rem;
+}
+
+#pos-app-shell:not(.sidebar-collapsed) .cat-info {
+    padding: 7px 9px 9px;
+    gap: 2px;
+}
+
+#pos-app-shell:not(.sidebar-collapsed) .cat-nombre {
+    font-size: 0.72rem;
+    min-height: 1.8em;
+}
+
+#pos-app-shell:not(.sidebar-collapsed) .cat-precio {
+    font-size: 0.84rem;
+}
+
+#pos-app-shell:not(.sidebar-collapsed) .cat-stock {
+    font-size: 0.6rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+    .pos-catalogo-panel {
+        flex-basis: 42%;
+        min-width: 300px;
+    }
+}
+
+@media (max-width: 900px) {
+    .pos-ventas-split {
+        flex-direction: column;
+    }
+
+    .pos-catalogo-panel {
+        flex: 0 0 auto;
+        max-width: none;
+        min-height: 0;
+        height: 42vh;
+    }
+
+.pos-ticket-panel {
+        flex: 0 0 52vh;
+        min-height: 0;
+        max-width: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .pos-ventas-split {
+        margin-top: 10px;
+        gap: 10px;
+    }
+
+    .catalogo-grid {
+        grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+        gap: 9px;
+        padding: 12px 12px 14px;
+    }
+
+    .cat-img {
+        height: 92px;
+    }
+
+    .pos-ventas-main .pos-ticket-panel .pos-tabs-bar {
+        padding: 12px 12px 0;
+    }
+
+    .pos-ventas-main .pos-ticket-panel .pos-tabla-contenedor {
+        padding: 0 12px 12px;
+    }
+}
+
+/* ============================================================
+   Modo oscuro
+   ============================================================ */
+:root[data-tema="oscuro"] .pos-catalogo-panel,
+:root[data-tema="oscuro"] .pos-ticket-panel {
+    background: #0f172a;
+    border-color: #24334d;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-tema="oscuro"] .catalogo-cabecera {
+    border-bottom-color: #24334d;
+}
+
+:root[data-tema="oscuro"] .catalogo-buscar input {
+    background: #131e33;
+    border-color: #24334d;
+    color: #e2e8f0;
+}
+
+:root[data-tema="oscuro"] .catalogo-categorias {
+    border-bottom-color: #24334d;
+}
+
+:root[data-tema="oscuro"] .cat-categoria {
+    background: #111a2e;
+    border-color: #24334d;
+    color: #94a3b8;
+}
+
+:root[data-tema="oscuro"] .cat-categoria:hover {
+    border-color: #60a5fa;
+    color: #93c5fd;
+}
+
+:root[data-tema="oscuro"] .cat-categoria.is-active {
+    background: #059669;
+    border-color: #059669;
+    color: #fff;
+}
+
+:root[data-tema="oscuro"] .cat-tarjeta {
+    background: #131e33;
+    border-color: #24334d;
+}
+
+:root[data-tema="oscuro"] .cat-tarjeta:hover {
+    border-color: #10b981;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4);
+}
+
+:root[data-tema="oscuro"] .cat-img {
+    background-color: #111a2e;
+    border-bottom-color: #24334d;
+    color: #475569;
+}
+
+:root[data-tema="oscuro"] .cat-img-vacia {
+    background-image: linear-gradient(135deg, #111a2e 0%, #16203a 100%);
+}
+
+:root[data-tema="oscuro"] .cat-nombre {
+    color: #e2e8f0;
+}
+
+:root[data-tema="oscuro"] .cat-precio {
+    color: #34d399;
+}
+
+:root[data-tema="oscuro"] .cat-stock {
+    color: #94a3b8;
+}
+
+:root[data-tema="oscuro"] .cat-tarjeta.cat-stock-bajo {
+    border-color: rgba(251, 191, 36, 0.4);
+}
+
+:root[data-tema="oscuro"] .cat-tarjeta.cat-stock-bajo .cat-stock {
+    color: #fbbf24;
+}
+/* ---------- Fila de mesa y orden ---------- */
+.pos-ticket-mesa {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 12px 0 12px;
+}
+
+.pos-ticket-tipo {
+    display: flex;
+    gap: 4px;
+    width: 100%;
+    background: var(--pos-panel-2);
+    border: 1px solid var(--pos-borde);
+    border-radius: 12px;
+    padding: 4px;
+}
+
+.ptt-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--pos-texto-soft);
+    font-size: 0.82rem;
+    font-weight: 800;
+    cursor: pointer;
+    user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: var(--pos-transicion);
+}
+
+.ptt-btn i {
+    font-size: 1rem;
+}
+
+.ptt-btn:hover {
+    color: var(--pos-azul-brand);
+}
+
+.ptt-btn.is-activo {
+    background: var(--pos-azul-brand);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.ptt-btn.is-activo i {
+    color: #fff;
+}
+
+:root[data-tema="oscuro"] .ptt-btn.is-activo {
+    color: #fff;
+}
+
+:root[data-tema="oscuro"] .ptt-btn.is-activo i {
+    color: #fff;
+}
+
+.pos-ticket-mesa-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--pos-texto-soft);
+    white-space: nowrap;
+}
+
+.pos-ticket-mesa-label i {
+    margin-right: 3px;
+    color: var(--pos-azul-brand);
+}
+
+.pos-ticket-mesa-input {
+    width: 72px;
+    padding: 5px 8px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-align: center;
+    background: var(--pos-card);
+    border: 1px solid var(--pos-borde);
+    border-radius: var(--pos-radio-sm);
+    color: var(--pos-texto);
+}
+
+.pos-ticket-mesa-input:focus {
+    border-color: var(--pos-azul-brand);
+    outline: none;
+}
+
+/* ---------- Barra de acciones táctiles (teclado tipo calculadora) ---------- */
+.pos-acciones-touch {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 0 -18px;
+    padding: 12px 18px 14px;
+    border-top: 1px solid var(--pos-borde);
+    background: var(--pos-panel);
+    flex-shrink: 0;
+}
+
+.pt-btn {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 62px;
+    padding: 8px 6px;
+    border: 1px solid var(--pos-borde-strong);
+    border-radius: 12px;
+    background: var(--pos-panel-2);
+    color: var(--pos-texto);
+    font-size: 0.76rem;
+    font-weight: 800;
+    line-height: 1.1;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: var(--pos-transicion);
+}
+
+.pt-btn:hover {
+    border-color: var(--pos-azul-brand);
+    background: var(--pos-azul-muy-claro);
+    color: var(--pos-azul-brand);
+}
+
+.pt-btn:active {
+    transform: scale(0.96);
+}
+
+.pt-icon {
+    font-size: 1.2rem;
+    color: var(--pos-azul-brand);
+    flex-shrink: 0;
+}
+
+.pt-btn-cobrar {
+    color: #fff;
+    background: var(--pos-verde, #10b981);
+    border-color: var(--pos-verde, #10b981);
+}
+
+.pt-btn-cobrar .pt-icon {
+    color: #fff;
+}
+
+.pt-btn-cobrar:hover {
+    background: var(--pos-verde-oscuro, #059669);
+    border-color: var(--pos-verde-oscuro, #059669);
+    color: #fff;
+}
+
+.pos-tecla-accion {
+    font-family: inherit;
+    font-size: 0.62rem;
+    font-weight: 800;
+    color: var(--pos-texto-soft);
+    border: 1px solid var(--pos-borde);
+    border-radius: 4px;
+    padding: 0 4px;
+    background: var(--pos-panel);
+}
+
+.pt-btn-cobrar .pos-tecla-accion {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.4);
+    background: transparent;
+}
+
+/* ---------- Botones de acción (pedido táctil) ---------- */
+.pt-btn-peligro {
+    color: var(--pos-rojo);
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+.pt-btn-peligro .pt-icon {
+    color: var(--pos-rojo);
+}
+
+.pt-btn-peligro:hover {
+    background: var(--pos-rojo-fondo);
+    border-color: var(--pos-rojo);
+    color: var(--pos-rojo);
+}
+
+.pt-separador {
+    align-self: stretch;
+    width: 1px;
+    margin: 6px 2px;
+    background: var(--pos-borde);
+}
+
+:root[data-tema="oscuro"] .pos-acciones-touch {
+    background: #111a2e;
+    border-top-color: #24334d;
+}
+
+:root[data-tema="oscuro"] .pt-btn {
+    background: #131e33;
+    border-color: #24334d;
+    color: #e2e8f0;
+}
+
+:root[data-tema="oscuro"] .pt-btn:hover {
+    border-color: #60a5fa;
+    background: #0e1a30;
+    color: #93c5fd;
+}
+
+:root[data-tema="oscuro"] .pt-btn-peligro {
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.35);
+}
+
+:root[data-tema="oscuro"] .pt-btn-peligro:hover {
+    background: #1f1416;
+    border-color: #ef4444;
+    color: #fca5a5;
+}
+
+:root[data-tema="oscuro"] .pt-btn-cobrar {
+    background: #10b981;
+    border-color: #10b981;
+    color: #fff;
+}
+
+:root[data-tema="oscuro"] .pt-btn-cobrar:hover {
+    background: #059669;
+    border-color: #059669;
+    color: #fff;
+}
+
+:root[data-tema="oscuro"] .pt-separador {
+    background: #24334d;
+}
+
+/* ---------- Ajustes táctiles del menú (pantalla táctil de POS) ---------- */
+.catalogo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+
+.cat-categoria {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.cat-tarjeta {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.cat-img {
+    height: 120px;
+}
+
+.cat-nombre {
+    font-size: 0.92rem;
+}
+
+.cat-precio {
+    font-size: 1.05rem;
+}
+
+.cat-stock {
+    font-size: 0.72rem;
+}
+
+.pos-ventas-main .pos-ticket-panel .pos-totales {
+    border-top: 0;
+}
+
+@media (max-width: 680px) {
+    .pos-acciones-touch {
+        margin: 0 -12px;
+        padding: 10px 12px;
+    }
+}
+
+@media (max-width: 640px) {
+    .catalogo-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+
+    .cat-img {
+        height: 100px;
+    }
+}
