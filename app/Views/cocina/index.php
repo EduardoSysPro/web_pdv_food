@@ -63,9 +63,9 @@
         <div class="cocina-meta" style="margin-top:8px;"><span><i class="fa-solid fa-comment"></i> <?php echo htmlspecialchars($comanda['observaciones']); ?></span></div>
         <?php endif; ?>
         <div class="cocina-acciones">
-            <button type="button" class="btn-cocina" data-comanda-id="<?php echo (int)$comanda['id']; ?>" data-estado="en_cocina">En cocina</button>
-            <button type="button" class="btn-listo" data-comanda-id="<?php echo (int)$comanda['id']; ?>" data-estado="listo">Listo</button>
-            <button type="button" class="btn-servida" data-comanda-id="<?php echo (int)$comanda['id']; ?>" data-estado="servida">Servida</button>
+            <button type="button" class="btn-cocina" data-comanda-id="<?php echo (int)$comanda['id']; ?>" data-estado="en_cocina"><i class="fa-solid fa-fire" aria-hidden="true"></i> En cocina</button>
+            <button type="button" class="btn-listo" data-comanda-id="<?php echo (int)$comanda['id']; ?>" data-estado="listo"><i class="fa-solid fa-check" aria-hidden="true"></i> Listo</button>
+            <button type="button" class="btn-servida" data-comanda-id="<?php echo (int)$comanda['id']; ?>" data-estado="servida"><i class="fa-solid fa-bell-concierge" aria-hidden="true"></i> Servida</button>
         </div>
     </div>
     <?php endforeach; ?>

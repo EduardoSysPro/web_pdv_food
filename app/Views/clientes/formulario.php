@@ -6,5 +6,5 @@
 	<div class="campo form-group"><label for="cliente-telefono">Teléfono</label><input id="cliente-telefono" name="telefono" maxlength="30" value="<?php echo htmlspecialchars($cliente['telefono'] ?? ''); ?>"></div>
 	<div class="campo campo-ancho form-group"><label for="cliente-direccion">Dirección</label><input id="cliente-direccion" name="direccion" maxlength="255" value="<?php echo htmlspecialchars($cliente['direccion'] ?? ''); ?>"></div>
 	<div class="campo form-group"><label for="cliente-limite">Límite de crédito (L)</label><input id="cliente-limite" name="limite_credito" type="number" min="0" step="0.01" value="<?php echo htmlspecialchars($cliente['limite_credito'] ?? '0.00'); ?>"></div>
-	<div class="form-acciones"><a class="btn btn-secondary" href="<?php echo URL_BASE; ?>clientes">Cancelar</a><button class="btn btn-success" type="submit">Guardar cliente</button></div>
+	<div class="form-acciones"><a class="btn-pos btn-pos-secondary" href="<?php echo URL_BASE; ?>clientes"><i class="fa-solid fa-xmark" aria-hidden="true"></i> Cancelar</a><button class="btn-pos btn-pos-primary" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Guardar cliente</button></div>
 </form>

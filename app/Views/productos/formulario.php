@@ -1,5 +1,5 @@
 <?php $tituloPagina = $titulo; require APP_PATH . 'Views/layouts/pos_header.php'; ?>
-<section class="catalogo-encabezado"><div><span class="eyebrow">F3 / Catálogo</span><h1><?php echo htmlspecialchars($titulo); ?></h1><p>Completa la información comercial y de inventario.</p></div><a class="btn-pos btn-secondary" href="<?php echo URL_BASE; ?>productos">Volver al catálogo</a></section>
+<section class="catalogo-encabezado"><div><span class="eyebrow">F3 / Catálogo</span><h1><?php echo htmlspecialchars($titulo); ?></h1><p>Completa la información comercial y de inventario.</p></div><a class="btn-pos btn-pos-secondary" href="<?php echo URL_BASE; ?>productos"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Volver al catálogo</a></section>
 <section class="tarjeta formulario-producto">
     <?php foreach (($errores ?? []) as $error): ?><div class="alerta alerta-error"><?php echo htmlspecialchars($error); ?></div><?php endforeach; ?>
     <form method="POST" action="<?php echo $accion; ?>" id="form-producto" enctype="multipart/form-data">
@@ -9,7 +9,7 @@
                 <label for="codigo_barras">Código de barras</label>
                 <div style="display:flex; gap:8px; align-items:center;">
                     <input id="codigo_barras" name="codigo_barras" value="<?php echo htmlspecialchars($producto['codigo_barras'] ?? ''); ?>" maxlength="50" class="codigo-barras-input" style="flex:1;">
-                    <button type="button" id="generar-codigo-interno" class="btn-pos btn-secondary" style="white-space:nowrap;">⚡ Generar Código</button>
+                    <button type="button" id="generar-codigo-interno" class="btn-pos btn-pos-secondary">⚡ Generar Código</button>
                 </div>
                 <div id="barcode-preview-wrapper" style="display:none; margin-top:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px; text-align:center;">
                     <svg id="barcode-preview" style="max-width:100%; height:70px;"></svg>
@@ -53,14 +53,14 @@
                 </div>
                 <div class="form-grid" id="filas-componentes" style="grid-template-columns:1fr 130px 40px; gap:8px; align-items:center;">
                     <?php if (count($componentes ?? []) === 0): ?>
-                        <div style="display:contents;"><div class="campo" style="margin:0;"><select name="componente_id[]" required><?php foreach ($todosProductos as $opc): ?><?php if ((int)$opc['id'] === (int)($producto['id'] ?? 0)) continue; ?><?php if (!empty($opc['es_combo'])) continue; ?><option value="<?php echo (int)$opc['id']; ?>"><?php echo htmlspecialchars($opc['nombre']); ?> (L <?php echo number_format((float)$opc['precio_venta'], 2); ?>)</option><?php endforeach; ?></select></div><div class="campo" style="margin:0;"><input type="number" name="componente_cantidad[]" value="1" min="0.001" step="0.001" required></div><button type="button" class="btn-pos btn-secondary quitar-componente" style="padding:8px; line-height:1;" title="Quitar">✕</button></div>
+                        <div style="display:contents;"><div class="campo" style="margin:0;"><select name="componente_id[]" required><?php foreach ($todosProductos as $opc): ?><?php if ((int)$opc['id'] === (int)($producto['id'] ?? 0)) continue; ?><?php if (!empty($opc['es_combo'])) continue; ?><option value="<?php echo (int)$opc['id']; ?>"><?php echo htmlspecialchars($opc['nombre']); ?> (L <?php echo number_format((float)$opc['precio_venta'], 2); ?>)</option><?php endforeach; ?></select></div><div class="campo" style="margin:0;"><input type="number" name="componente_cantidad[]" value="1" min="0.001" step="0.001" required></div><button type="button" class="btn-pos btn-pos-danger btn-pequeno quitar-componente" title="Quitar">✕</button></div>
                     <?php else: ?>
                         <?php foreach (($componentes ?? []) as $comp): ?>
-                            <div style="display:contents;"><div class="campo" style="margin:0;"><select name="componente_id[]" required><?php foreach ($todosProductos as $opc): ?><?php if ((int)$opc['id'] === (int)($producto['id'] ?? 0)) continue; ?><?php if (!empty($opc['es_combo'])) continue; ?><option value="<?php echo (int)$opc['id']; ?>" <?php echo (int)($comp['producto_id'] ?? 0) === (int)$opc['id'] ? 'selected' : ''; ?>><?php echo htmlspecialchars($opc['nombre']); ?> (L <?php echo number_format((float)$opc['precio_venta'], 2); ?>)</option><?php endforeach; ?></select></div><div class="campo" style="margin:0;"><input type="number" name="componente_cantidad[]" value="<?php echo htmlspecialchars((string)($comp['cantidad'] ?? 1)); ?>" min="0.001" step="0.001" required></div><button type="button" class="btn-pos btn-secondary quitar-componente" style="padding:8px; line-height:1;" title="Quitar">✕</button></div>
+                            <div style="display:contents;"><div class="campo" style="margin:0;"><select name="componente_id[]" required><?php foreach ($todosProductos as $opc): ?><?php if ((int)$opc['id'] === (int)($producto['id'] ?? 0)) continue; ?><?php if (!empty($opc['es_combo'])) continue; ?><option value="<?php echo (int)$opc['id']; ?>" <?php echo (int)($comp['producto_id'] ?? 0) === (int)$opc['id'] ? 'selected' : ''; ?>><?php echo htmlspecialchars($opc['nombre']); ?> (L <?php echo number_format((float)$opc['precio_venta'], 2); ?>)</option><?php endforeach; ?></select></div><div class="campo" style="margin:0;"><input type="number" name="componente_cantidad[]" value="<?php echo htmlspecialchars((string)($comp['cantidad'] ?? 1)); ?>" min="0.001" step="0.001" required></div><button type="button" class="btn-pos btn-pos-danger btn-pequeno quitar-componente" title="Quitar">✕</button></div>
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
-                <button type="button" id="agregar-componente" class="btn-pos btn-secondary" style="margin-top:12px;">+ Agregar componente</button>
+                <button type="button" id="agregar-componente" class="btn-pos btn-pos-secondary" style="margin-top:12px;"><i class="fa-solid fa-plus" aria-hidden="true"></i> Agregar componente</button>
                 <input type="hidden" id="opciones-productos" value="<?php echo htmlspecialchars(json_encode($todosProductos, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8'); ?>">
                 <input type="hidden" id="id-producto-actual" value="<?php echo (int)($producto['id'] ?? 0); ?>">
             </div>
@@ -85,8 +85,8 @@
                 <img id="img-previa-producto" alt="Vista previa" style="width:64px; height:64px; object-fit:cover; border-radius:8px; border:1px solid #cbd5e1;">
             </div>
         </div>
-        <div class="ganancia-calculo"><span>Ganancia (Unidad): <strong id="ganancia">0.00%</strong></span><button type="button" class="btn-pos btn-secondary" id="sugerir-precio">Sugerir venta +30%</button></div>
-        <div class="form-acciones"><a class="btn-pos btn-secondary" href="<?php echo URL_BASE; ?>productos">Cancelar</a><button class="btn-pos btn-success" type="submit">Guardar Producto</button></div>
+        <div class="ganancia-calculo"><span>Ganancia (Unidad): <strong id="ganancia">0.00%</strong></span><button type="button" class="btn-pos btn-pos-secondary" id="sugerir-precio"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i> Sugerir venta +30%</button></div>
+        <div class="form-acciones"><a class="btn-pos btn-pos-secondary" href="<?php echo URL_BASE; ?>productos"><i class="fa-solid fa-xmark" aria-hidden="true"></i> Cancelar</a><button class="btn-pos btn-pos-primary" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Guardar Producto</button></div>
     </form>
 </section>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
@@ -223,7 +223,7 @@
         fila.innerHTML =
             '<div class="campo" style="margin:0;"><select name="componente_id[]" required>' + opcionesSelectComponente(sel) + '</select></div>' +
             '<div class="campo" style="margin:0;"><input type="number" name="componente_cantidad[]" value="' + cant + '" min="0.001" step="0.001" required></div>' +
-            '<button type="button" class="btn-pos btn-secondary quitar-componente" style="padding:8px; line-height:1;" title="Quitar">✕</button>';
+            '<button type="button" class="btn-pos btn-pos-danger btn-pequeno quitar-componente" title="Quitar">✕</button>';
         fila.querySelector('.quitar-componente').addEventListener('click', function () { fila.remove(); });
         return fila;
     }

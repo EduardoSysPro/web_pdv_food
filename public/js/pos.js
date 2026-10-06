@@ -1626,7 +1626,13 @@
                 }
             }
 
-            // F10 -> Abrir / alternar búsqueda de productos
+            // Ctrl+K (buscador universal del tema minimalista) y F10 -> Abrir / alternar búsqueda de productos
+            // Ctrl+K es solo un alias: reutiliza el mismo modal de F10, sin tocar F6-F12.
+            if ((e.ctrlKey || e.metaKey) && String(e.key || '').toLowerCase() === 'k') {
+                e.preventDefault();
+                abrirModalBusquedaProductos();
+                return;
+            }
             if (e.key === 'F10') {
                 e.preventDefault();
                 abrirModalBusquedaProductos();

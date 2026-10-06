@@ -160,7 +160,7 @@
                             <label for="cliente_buscar" style="font-size: 11px;">Buscar cliente registrado:</label>
                             <div style="display: flex; gap: 6px; align-items: center;">
                                 <input type="text" id="cliente_buscar" class="cobro-input" placeholder="Nombre o RTN / DNI" style="padding: 4px 8px; font-size: 12px; flex: 1;">
-                                <?php if ($esAdministrador): ?><button type="button" id="btn-nuevo-cliente" class="btn-pos-success" style="padding: 6px 10px; font-size: 11px; white-space: nowrap;">+ Nuevo Cliente</button><?php endif; ?>
+                                <?php if ($esAdministrador): ?><button type="button" id="btn-nuevo-cliente" class="btn-pos btn-pos-primary btn-pequeno"><i class="fa-solid fa-plus" aria-hidden="true"></i> Nuevo Cliente</button><?php endif; ?>
                             </div>
                             <div id="cliente_buscar_resultados" style="display: none; margin-top: 6px; background: #fff; border: 1px solid #dbeafe; border-radius: 6px; max-height: 160px; overflow: auto; padding: 6px;"></div>
                         </div>

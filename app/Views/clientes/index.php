@@ -6,7 +6,7 @@
         <h1>Clientes y crédito</h1>
         <p>Consulta saldos, límites y estados de cuenta.</p>
     </div>
-    <button class="btn-pos btn-success" type="button" onclick="document.getElementById('nuevo-cliente').hidden=false">+ Nuevo Cliente</button>
+    <button class="btn-pos btn-pos-primary" type="button" onclick="document.getElementById('nuevo-cliente').hidden=false"><i class="fa-solid fa-plus" aria-hidden="true"></i> Nuevo Cliente</button>
 </section>
 
 <?php if ($mensaje): ?>
@@ -23,8 +23,8 @@
 <section class="tarjeta catalogo-panel">
     <form class="filtros-productos" method="GET">
         <input type="search" name="busqueda" value="<?php echo htmlspecialchars($busqueda); ?>" placeholder="Buscar nombre, RTN o identidad...">
-        <button class="btn btn-primario">Buscar</button>
-        <a class="btn btn-ligero" href="<?php echo URL_BASE; ?>clientes">Limpiar</a>
+        <button class="btn-pos btn-pos-primary" type="submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Buscar</button>
+        <a class="btn-pos btn-pos-secondary" href="<?php echo URL_BASE; ?>clientes"><i class="fa-solid fa-eraser" aria-hidden="true"></i> Limpiar</a>
     </form>
 
     <div class="tabla-responsive">
@@ -56,8 +56,8 @@
                             <?php echo formatearMoneda($cliente['saldo_pendiente']); ?>
                         </td>
                         <td class="acciones">
-                            <a class="btn btn-pequeno btn-primario" href="<?php echo URL_BASE; ?>clientes/editar/<?php echo (int)$cliente['id']; ?>">Editar</a>
-                            <a class="btn btn-pequeno btn-exito" href="<?php echo URL_BASE; ?>clientes/estado-cuenta/<?php echo (int)$cliente['id']; ?>">Estado de cuenta</a>
+                            <a class="btn-pos btn-pos-primary btn-pequeno" href="<?php echo URL_BASE; ?>clientes/editar/<?php echo (int)$cliente['id']; ?>">Editar</a>
+                            <a class="btn-pos btn-pos-primary btn-pequeno" href="<?php echo URL_BASE; ?>clientes/estado-cuenta/<?php echo (int)$cliente['id']; ?>">Estado de cuenta</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

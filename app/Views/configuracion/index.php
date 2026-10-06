@@ -211,12 +211,12 @@
                 </div>
 
                 <div class="campo campo-ancho">
-                    <button type="button" class="btn btn-ligero" id="btn-probar-impresora"><i class="fa-solid fa-plug"></i> Probar impresión de red</button>
+                    <button type="button" class="btn-pos btn-pos-secondary" id="btn-probar-impresora"><i class="fa-solid fa-plug" aria-hidden="true"></i> Probar impresión de red</button>
                     <div id="resultado-impresora" style="margin-top: 10px;"></div>
                 </div>
 
                 <div class="campo campo-ancho">
-                    <button type="button" class="btn btn-ligero" id="btn-analizar-red">
+                    <button type="button" class="btn-pos btn-pos-secondary" id="btn-analizar-red">
                         <i class="fa-solid fa-network-wired" id="btn-analizar-icono"></i>
                         <span id="btn-analizar-texto">Analizar red e identificar impresoras</span>
                     </button>
@@ -229,7 +229,7 @@
         </section>
 
         <div class="form-acciones campo-ancho">
-            <button class="btn btn-exito">Guardar configuración</button>
+            <button class="btn-pos btn-pos-primary" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Guardar configuración</button>
         </div>
     </form>
 
@@ -557,7 +557,7 @@
                     '<strong>' + escapar(p.nombre) + '</strong>' +
                     '<small>' + escapar(p.ip) + '</small>' +
                 '</span>' +
-                '<button type="button" class="btn btn-pequeno btn-exito lan-analizador-usar" data-ip="' + escapar(p.ip) + '"><i class="fa-solid fa-arrow-pointer"></i> Usar IP</button>' +
+                '<button type="button" class="btn-pos btn-pos-primary btn-pequeno lan-analizador-usar" data-ip="' + escapar(p.ip) + '"><i class="fa-solid fa-arrow-pointer"></i> Usar IP</button>' +
             '</div>';
         }).join('');
         html += '</div>';

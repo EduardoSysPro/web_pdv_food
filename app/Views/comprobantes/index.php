@@ -5,7 +5,7 @@
         <h1>Reimpresión de Comprobantes</h1>
         <p>Busca y reimprimi facturas, recibos y comprobantes de tus ventas anteriores.</p>
     </div>
-    <a class="btn-pos btn-secondary" href="<?php echo URL_BASE; ?>ventas">Volver a ventas</a>
+    <a class="btn-pos btn-pos-secondary" href="<?php echo URL_BASE; ?>ventas"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Volver a ventas</a>
 </section>
 
 <?php if ($error): ?>
@@ -39,8 +39,8 @@
         </div>
 
         <div style="grid-column: 1 / -1; display: flex; gap: 8px;">
-            <button class="btn-pos btn-primary" type="submit">Buscar</button>
-            <a class="btn-pos btn-secondary" href="<?php echo URL_BASE; ?>comprobantes">Limpiar</a>
+            <button class="btn-pos btn-pos-primary" type="submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Buscar</button>
+            <a class="btn-pos btn-pos-secondary" href="<?php echo URL_BASE; ?>comprobantes"><i class="fa-solid fa-eraser" aria-hidden="true"></i> Limpiar</a>
         </div>
     </form>
 </section>
@@ -74,8 +74,8 @@
                             </td>
                             <td><?php echo formatearMoneda($comprobante['total']); ?></td>
                             <td>
-                                <a href="<?php echo URL_BASE; ?>comprobantes/imprimir/<?php echo (int)$comprobante['id']; ?>?copias=1" class="btn-pos btn-primary" target="_blank">Imprimir</a>
-                                <button type="button" class="btn-pos btn-secondary" data-comprobante-lan="<?php echo (int)$comprobante['id']; ?>"><i class="fa-solid fa-wifi"></i> Imprimir LAN</button>
+                                <a href="<?php echo URL_BASE; ?>comprobantes/imprimir/<?php echo (int)$comprobante['id']; ?>?copias=1" class="btn-pos btn-pos-primary" target="_blank"><i class="fa-solid fa-print" aria-hidden="true"></i> Imprimir</a>
+                                <button type="button" class="btn-pos btn-pos-secondary" data-comprobante-lan="<?php echo (int)$comprobante['id']; ?>"><i class="fa-solid fa-wifi"></i> Imprimir LAN</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
