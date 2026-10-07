@@ -28,7 +28,7 @@ class ClientesController extends Controller
         $this->requerirAutenticacion();
         $datos = $this->leerDatos();
         if ($datos['nombre'] === '') { $_SESSION['mensaje_clientes'] = 'El nombre es obligatorio.'; $this->redirigir('clientes'); }
-        try { $this->modelo->insertar($datos); $_SESSION['mensaje_clientes'] = 'Cliente creado correctamente.'; } catch (Throwable $e) { $_SESSION['mensaje_clientes'] = 'No se pudo guardar el cliente: ' . $e->getMessage(); }
+        try { $id = $this->modelo->insertar($datos); $_SESSION['mensaje_clientes'] = 'Cliente creado correctamente.'; $this->registrarAuditoria('clientes', 'crear', ['entidad_tipo' => 'cliente', 'entidad_id' => (string)$id, 'descripcion' => 'Cliente creado: ' . $datos['nombre']]); } catch (Throwable $e) { $_SESSION['mensaje_clientes'] = 'No se pudo guardar el cliente: ' . $e->getMessage(); }
         $this->redirigir('clientes');
     }
 
@@ -58,6 +58,7 @@ class ClientesController extends Controller
             }
 
             $cliente = $this->modelo->obtenerPorId($clienteId);
+            $this->registrarAuditoria('clientes', 'crear', ['entidad_tipo' => 'cliente', 'entidad_id' => (string)$clienteId, 'descripcion' => 'Cliente creado (rápido/ventas): ' . $datos['nombre']]);
             echo json_encode([
                 'exito' => true,
                 'mensaje' => 'Cliente registrado correctamente.',
@@ -83,7 +84,7 @@ class ClientesController extends Controller
         $id = (int)($parametros['id'] ?? 0);
         $datos = $this->leerDatos();
         if ($datos['nombre'] === '') { $_SESSION['mensaje_clientes'] = 'El nombre es obligatorio.'; $this->redirigir('clientes'); }
-        try { $this->modelo->actualizar($id, $datos); $_SESSION['mensaje_clientes'] = 'Cliente actualizado correctamente.'; } catch (Throwable $e) { $_SESSION['mensaje_clientes'] = 'No se pudo actualizar: ' . $e->getMessage(); }
+        try { $this->modelo->actualizar($id, $datos); $_SESSION['mensaje_clientes'] = 'Cliente actualizado correctamente.'; $this->registrarAuditoria('clientes', 'actualizar', ['entidad_tipo' => 'cliente', 'entidad_id' => (string)$id, 'descripcion' => 'Cliente actualizado: ' . $datos['nombre']]); } catch (Throwable $e) { $_SESSION['mensaje_clientes'] = 'No se pudo actualizar: ' . $e->getMessage(); }
         $this->redirigir('clientes');
     }
 
@@ -110,6 +111,7 @@ class ClientesController extends Controller
             $stmt->execute($parametros);
             $_SESSION['mensaje_clientes'] = 'Abono registrado correctamente.';
             $_SESSION['ultimo_abono_id'] = $pagoId;
+            $this->registrarAuditoria('clientes', 'abono', ['entidad_tipo' => 'cliente', 'entidad_id' => (string)$clienteId, 'descripcion' => 'Abono cliente #' . $clienteId . ' - L ' . number_format((float)$_POST['monto'], 2), 'monto' => (float)$_POST['monto']]);
         } catch (Throwable $e) { $_SESSION['mensaje_clientes'] = 'No se pudo registrar el abono: ' . $e->getMessage(); }
         $this->redirigir('clientes/estado-cuenta/' . $clienteId);
     }

@@ -913,6 +913,14 @@ class VentasController extends Controller
 
             $pdo->commit();
 
+            $this->registrarAuditoria('ventas', 'crear', [
+                'entidad_tipo' => $tipoComprobante === 'factura' ? 'factura' : 'recibo',
+                'entidad_id' => $folio,
+                'descripcion' => ($tipoComprobante === 'factura' ? 'Factura ' : 'Recibo ') . $folio . ' - ' . ucfirst($metodoPago) . ' - Total L ' . number_format($total, 2),
+                'monto' => $total,
+                'datos' => ['venta_id' => $ventaId, 'metodo_pago' => $metodoPago, 'cliente_id' => $clienteId ?: null, 'tipo_comprobante' => $tipoComprobante],
+            ], $pdo);
+
             echo json_encode([
                 'exito'   => true,
                 'mensaje' => 'Venta registrada exitosamente.',

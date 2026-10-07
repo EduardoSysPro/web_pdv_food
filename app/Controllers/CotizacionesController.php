@@ -92,6 +92,14 @@ class CotizacionesController extends Controller
             $this->modeloCotizacion->reemplazarDetalle($cotizacionId, $procesado['items']);
             $pdo->commit();
 
+            $this->registrarAuditoria('cocina', 'crear', [
+                'entidad_tipo' => 'comanda',
+                'entidad_id' => $folio,
+                'descripcion' => 'Comanda ' . $folio . ' enviada a cocina - Total L ' . number_format((float)$procesado['total'], 2),
+                'monto' => (float)$procesado['total'],
+                'datos' => ['cotizacion_id' => $cotizacionId, 'venta_id' => $ventaId > 0 ? $ventaId : null],
+            ], $pdo);
+
             echo json_encode([
                 'exito'      => true,
                 'mensaje'    => 'Comanda ' . $folio . ' generada.',

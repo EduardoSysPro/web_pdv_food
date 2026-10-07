@@ -139,4 +139,7 @@ $router->post('/impresora/imprimir-venta/{id}', 'ImpresoraController@imprimirVen
 $router->post('/impresora/probar', 'ImpresoraController@probar');
 $router->post('/impresora/escaneo-lan', 'ImpresoraController@escaneoLan');
 
+$router->get('/auditoria', 'AuditoriaController@index');
+$router->get('/auditoria/exportar', 'AuditoriaController@exportar');
+
 $router->procesar();

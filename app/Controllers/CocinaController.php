@@ -49,6 +49,12 @@ class CocinaController extends Controller
         }
 
         if ($this->modeloCotizacion->cambiarEstadoComanda($id, $estado)) {
+            $this->registrarAuditoria('cocina', 'actualizar', [
+                'entidad_tipo' => 'comanda',
+                'entidad_id' => (string)$id,
+                'descripcion' => 'Comanda #' . $id . ' cambió a estado: ' . $estado,
+                'datos' => ['nuevo_estado' => $estado],
+            ]);
             echo json_encode(['exito' => true, 'mensaje' => 'Comanda actualizada.']);
         } else {
             echo json_encode(['exito' => false, 'mensaje' => 'No se pudo actualizar la comanda.']);
@@ -69,6 +75,12 @@ class CocinaController extends Controller
         }
 
         if ($this->modeloCotizacion->cambiarEstadoItem($id, $estado)) {
+            $this->registrarAuditoria('cocina', 'actualizar', [
+                'entidad_tipo' => 'comanda_item',
+                'entidad_id' => (string)$id,
+                'descripcion' => 'Ítem de comanda #' . $id . ' cambió a estado: ' . $estado,
+                'datos' => ['nuevo_estado' => $estado],
+            ]);
             echo json_encode(['exito' => true, 'mensaje' => 'Artículo actualizado.']);
         } else {
             echo json_encode(['exito' => false, 'mensaje' => 'No se pudo actualizar el artículo.']);
